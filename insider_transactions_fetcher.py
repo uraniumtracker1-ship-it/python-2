@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Insider Transactions Fetcher - Process 4
-Fetches insider transaction data for lithium stocks from US and Canadian sources
+Insider Transactions Fetcher - Process 2
+Fetches insider transaction data for uranium stocks from US and Canadian sources
 """
 
 import requests
@@ -265,9 +265,9 @@ def get_canadian_insider_data(ticker, company_name):
         return []
 
 def load_tickers_from_csv():
-    """Load tickers from lithium_stocks_complete.csv"""
+    """Load tickers from uranium_stocks_complete.csv"""
     tickers_data = []
-    csv_path = os.path.join(os.path.dirname(__file__), 'lithium_stocks_complete.csv')
+    csv_path = os.path.join(os.path.dirname(__file__), 'uranium_stocks_complete.csv')
     
     try:
         with open(csv_path, 'r', encoding='utf-8') as file:
@@ -332,7 +332,7 @@ def check_transaction_exists(cursor, ticker, transaction_date, insider_name):
 
 def main():
     """Main function to fetch and store insider transactions"""
-    logging.info("🚀 Starting Insider Transactions Fetcher (Process 4)")
+    logging.info("🚀 Starting Insider Transactions Fetcher (Process 2)")
     
     connection = None
     cursor = None

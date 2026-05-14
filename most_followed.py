@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+"""
+Most Followed Uranium Stocks Fetcher - Process 1
+Fetches stock data for uranium stocks across regions
+"""
+
 import threading
 import time
 import yfinance as yf
@@ -10,35 +16,35 @@ server_config = os.getenv("server_config")
 
 # Custom ticker mappings for Yahoo Finance
 custom_mappings = {
-    'ALB': 'ALB',
-    'SQM': 'SQM',
-    'LTHM': 'LTHM',
-    'LAC': 'LAC',
-    'GNENF': 'GNENF',
-    'RIO': 'RIO',
-    'LITM': 'LITM',
-    'QDST': 'QDST',
-    'SGML': 'SGML',
-    'LIT': 'LIT',
-    'LIXT': 'LIXT',
-    'LI': 'LI.TO',
-    'LIACF': 'LIACF',
-    'LIILIF': 'LIILIF',
-    'LIACF2': 'LIACF',
-    'E3M': 'E3M.V',
-    'PMET': 'PMET.TO',
-    'FL': 'FL.V',
-    'LITM2': 'LITM',
-    'PLS': 'PLS.AX',
-    'LTR': 'LTR.AX',
-    'MIN': 'MIN.AX',
-    'IGO': 'IGO.AX',
-    'CXO': 'CXO.AX',
-    'GL1': 'GL1.AX',
-    'VUL': 'VUL.AX',
-    'LKE': 'LKE.AX',
-    'AGY': 'AGY.AX',
-    'AKE': 'AKE.AX',
+    'GLATF': 'GLATF',
+    'UEC': 'UEC',
+    'PALAF': 'PALAF',
+    'GVXXF': 'GVXXF',
+    'URAX': 'URAX',
+    '1164.HK': '1164.HK',
+    'EU': 'EU',
+    'NATKY': 'NATKY',
+    'SPUT': 'SPUT.TO',
+    'PDN': 'PDN.AX',
+    'ABA.V': 'ABA.V',
+    'ANLDF': 'ANLDF',
+    'LI.V': 'LI.V',
+    'MAW.V': 'MAW.V',
+    'MWSNF': 'MWSNF',
+    'URG': 'URG',
+    'FMC.V': 'FMC.V',
+    'DMX.V': 'DMX.V',
+    'SASK.V': 'SASK.V',
+    'THB.AX': 'THB.AX',
+    'AEE.AX': 'AEE.AX',
+    'BKY.AX': 'BKY.AX',
+    'LAM.AX': 'LAM.AX',
+    'DYL.AX': 'DYL.AX',
+    'DEV.AX': 'DEV.AX',
+    'BOE.AX': 'BOE.AX',
+    'BMN.AX': 'BMN.AX',
+    'EL8.AX': 'EL8.AX',
+    'PDN.AX': 'PDN.AX',
 }
 
 # Exchange suffix mappings for Yahoo Finance
@@ -58,46 +64,46 @@ exchange_mappings = {
     'OTC': ''
 }
 
-# Column 1: Most Watched Lithium
+# Column 1: Most Watched Uranium Stocks
 most_watched = [
-    {"Name": "Albemarle Corporation", "Country": "United States", "Ticker": "ALB", "tv_ticker": "ALB", "Stock exchange": "NYSE", "stock_exchange_tv": "NYSE"},
-    {"Name": "Sociedad Quimica y Minera", "Country": "Chile", "Ticker": "SQM", "tv_ticker": "SQM", "Stock exchange": "NYSE", "stock_exchange_tv": "NYSE"},
-    {"Name": "Livent Corporation", "Country": "United States", "Ticker": "LTHM", "tv_ticker": "LTHM", "Stock exchange": "NYSE", "stock_exchange_tv": "NYSE"},
-    {"Name": "Lithium Americas", "Country": "Canada", "Ticker": "LAC", "tv_ticker": "LAC", "Stock exchange": "NYSE", "stock_exchange_tv": "NYSE"},
-    {"Name": "Ganfeng Lithium (ADR)", "Country": "China", "Ticker": "GNENF", "tv_ticker": "GNENF", "Stock exchange": "OTC", "stock_exchange_tv": "OTC"},
-    {"Name": "Rio Tinto (Arcadium)", "Country": "United Kingdom", "Ticker": "RIO", "tv_ticker": "RIO", "Stock exchange": "NYSE", "stock_exchange_tv": "NYSE"},
-    {"Name": "Standard Lithium", "Country": "Canada", "Ticker": "LITM", "tv_ticker": "LITM", "Stock exchange": "NYSE", "stock_exchange_tv": "NYSE"},
-    {"Name": "Lithium Argentina", "Country": "Canada", "Ticker": "LITM", "tv_ticker": "LITM", "Stock exchange": "NYSE", "stock_exchange_tv": "NYSE"},
-    {"Name": "Sigma Lithium", "Country": "Canada", "Ticker": "SGML", "tv_ticker": "SGML", "Stock exchange": "NASDAQ", "stock_exchange_tv": "NASDAQ"},
-    {"Name": "Global X Lithium ETF", "Country": "United States", "Ticker": "LIT", "tv_ticker": "LIT", "Stock exchange": "NYSE Arca", "stock_exchange_tv": "AMEX"},
+    {"Name": "Global Atomic Corporation", "Country": "Canada", "Ticker": "GLATF", "tv_ticker": "GLATF", "Stock exchange": "OTC", "stock_exchange_tv": "OTC"},
+    {"Name": "Uranium Energy Corporation", "Country": "United States", "Ticker": "UEC", "tv_ticker": "UEC", "Stock exchange": "NYSE", "stock_exchange_tv": "NYSE"},
+    {"Name": "Paladin Energy Limited", "Country": "Australia", "Ticker": "PALAF", "tv_ticker": "PALAF", "Stock exchange": "OTC", "stock_exchange_tv": "OTC"},
+    {"Name": "GoviEx Uranium Inc", "Country": "Canada", "Ticker": "GVXXF", "tv_ticker": "GVXXF", "Stock exchange": "OTC", "stock_exchange_tv": "OTC"},
+    {"Name": "Defiance Daily Target 2X Long Uranium", "Country": "United States", "Ticker": "URAX", "tv_ticker": "URAX", "Stock exchange": "NYSE Arca", "stock_exchange_tv": "AMEX"},
+    {"Name": "CGN Mining Company Limited", "Country": "China", "Ticker": "1164.HK", "tv_ticker": "1164.HK", "Stock exchange": "HKEX", "stock_exchange_tv": "HKEX"},
+    {"Name": "enCore Energy Corporation", "Country": "United States", "Ticker": "EU", "tv_ticker": "EU", "Stock exchange": "NASDAQ", "stock_exchange_tv": "NASDAQ"},
+    {"Name": "Kazatomprom", "Country": "Kazakhstan", "Ticker": "NATKY", "tv_ticker": "NATKY", "Stock exchange": "OTC", "stock_exchange_tv": "OTC"},
+    {"Name": "Sprott Physical Uranium Trust", "Country": "Canada", "Ticker": "SPUT", "tv_ticker": "SPUT", "Stock exchange": "TSX", "stock_exchange_tv": "TSX"},
+    {"Name": "Paladin Energy", "Country": "Australia", "Ticker": "PDN", "tv_ticker": "PDN", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
 ]
 
-# Column 2: North American Leaders
+# Column 2: North American Uranium Leaders
 north_american_leaders = [
-    {"Name": "Lithium Ionic", "Country": "Canada", "Ticker": "LIILIF", "tv_ticker": "LIILIF", "Stock exchange": "OTC", "stock_exchange_tv": "OTC"},
-    {"Name": "Lithium Americas Corp", "Country": "Canada", "Ticker": "LIACF", "tv_ticker": "LIACF", "Stock exchange": "OTC", "stock_exchange_tv": "OTC"},
-    {"Name": "E3 Lithium", "Country": "Canada", "Ticker": "E3M", "tv_ticker": "E3M", "Stock exchange": "TSX.V", "stock_exchange_tv": "TSXV"},
-    {"Name": "Patriot Battery Metals", "Country": "Canada", "Ticker": "PMET", "tv_ticker": "PMET", "Stock exchange": "TSX.V", "stock_exchange_tv": "TSXV"},
-    {"Name": "Frontier Lithium", "Country": "Canada", "Ticker": "FL", "tv_ticker": "FL", "Stock exchange": "TSX.V", "stock_exchange_tv": "TSXV"},
-    {"Name": "Standard Lithium", "Country": "Canada", "Ticker": "LITM", "tv_ticker": "LITM", "Stock exchange": "NYSE", "stock_exchange_tv": "NYSE"},
-    {"Name": "QuantumScape (batteries)", "Country": "United States", "Ticker": "QDST", "tv_ticker": "QDST", "Stock exchange": "NYSE", "stock_exchange_tv": "NYSE"},
-    {"Name": "Euro Manganese", "Country": "Canada", "Ticker": "EEMMF", "tv_ticker": "EEMMF", "Stock exchange": "OTC", "stock_exchange_tv": "OTC"},
-    {"Name": "Li Auto (EV)", "Country": "China", "Ticker": "LI", "tv_ticker": "LI", "Stock exchange": "NASDAQ", "stock_exchange_tv": "NASDAQ"},
-    {"Name": "Lithium Americas", "Country": "Canada", "Ticker": "LIACF", "tv_ticker": "LIACF", "Stock exchange": "OTC", "stock_exchange_tv": "OTC"},
+    {"Name": "GoviEx Uranium Inc", "Country": "Canada", "Ticker": "GVXXF", "tv_ticker": "GVXXF", "Stock exchange": "OTC", "stock_exchange_tv": "OTC"},
+    {"Name": "Abasca Resources Inc.", "Country": "Canada", "Ticker": "ABA.V", "tv_ticker": "ABA.V", "Stock exchange": "TSX.V", "stock_exchange_tv": "TSXV"},
+    {"Name": "Anfield Energy Inc.", "Country": "Canada", "Ticker": "ANLDF", "tv_ticker": "ANLDF", "Stock exchange": "OTC", "stock_exchange_tv": "OTC"},
+    {"Name": "American Lithium Corp.", "Country": "Canada", "Ticker": "LI.V", "tv_ticker": "LI.V", "Stock exchange": "TSX.V", "stock_exchange_tv": "TSXV"},
+    {"Name": "Mawson Gold Ltd.", "Country": "Canada", "Ticker": "MAW.V", "tv_ticker": "MAW.V", "Stock exchange": "TSX.V", "stock_exchange_tv": "TSXV"},
+    {"Name": "Mawson Gold Ltd.", "Country": "Canada", "Ticker": "MWSNF", "tv_ticker": "MWSNF", "Stock exchange": "OTC", "stock_exchange_tv": "OTC"},
+    {"Name": "Ur-Energy", "Country": "Canada", "Ticker": "URG", "tv_ticker": "URG", "Stock exchange": "NYSE", "stock_exchange_tv": "NYSE"},
+    {"Name": "Forum Energy Metals Corp.", "Country": "Canada", "Ticker": "FMC.V", "tv_ticker": "FMC.V", "Stock exchange": "TSX.V", "stock_exchange_tv": "TSXV"},
+    {"Name": "District Metals Corp.", "Country": "Canada", "Ticker": "DMX.V", "tv_ticker": "DMX.V", "Stock exchange": "TSX.V", "stock_exchange_tv": "TSXV"},
+    {"Name": "ATHA Energy Corp.", "Country": "Canada", "Ticker": "SASK.V", "tv_ticker": "SASK.V", "Stock exchange": "TSX.V", "stock_exchange_tv": "TSXV"},
 ]
 
-# Column 3: Australian Lithium Leaders
+# Column 3: ASX Uranium Market Leaders
 global_market_leaders = [
-    {"Name": "Pilbara Minerals", "Country": "Australia", "Ticker": "PLS", "tv_ticker": "PLS", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
-    {"Name": "Liontown Resources", "Country": "Australia", "Ticker": "LTR", "tv_ticker": "LTR", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
-    {"Name": "Mineral Resources", "Country": "Australia", "Ticker": "MIN", "tv_ticker": "MIN", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
-    {"Name": "IGO Limited", "Country": "Australia", "Ticker": "IGO", "tv_ticker": "IGO", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
-    {"Name": "Core Lithium", "Country": "Australia", "Ticker": "CXO", "tv_ticker": "CXO", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
-    {"Name": "Global Lithium Resources", "Country": "Australia", "Ticker": "GL1", "tv_ticker": "GL1", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
-    {"Name": "Vulcan Energy Resources", "Country": "Australia", "Ticker": "VUL", "tv_ticker": "VUL", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
-    {"Name": "Lake Resources", "Country": "Australia", "Ticker": "LKE", "tv_ticker": "LKE", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
-    {"Name": "Argosy Minerals", "Country": "Australia", "Ticker": "AGY", "tv_ticker": "AGY", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
-    {"Name": "Allkem Limited", "Country": "Australia", "Ticker": "AKE", "tv_ticker": "AKE", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
+    {"Name": "Lotus Resources Limited", "Country": "Australia", "Ticker": "THB.AX", "tv_ticker": "THB.AX", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
+    {"Name": "Aura Energy Limited", "Country": "Australia", "Ticker": "AEE.AX", "tv_ticker": "AEE.AX", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
+    {"Name": "Berkeley Energia Ltd.", "Country": "Australia", "Ticker": "BKY.AX", "tv_ticker": "BKY.AX", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
+    {"Name": "Laramide Resources", "Country": "Australia", "Ticker": "LAM.AX", "tv_ticker": "LAM.AX", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
+    {"Name": "Deep Yellow Limited", "Country": "Australia", "Ticker": "DYL.AX", "tv_ticker": "DYL.AX", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
+    {"Name": "DevEx Resources Ltd.", "Country": "Australia", "Ticker": "DEV.AX", "tv_ticker": "DEV.AX", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
+    {"Name": "Boss Energy", "Country": "Australia", "Ticker": "BOE.AX", "tv_ticker": "BOE.AX", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
+    {"Name": "Bannerman Energy", "Country": "Australia", "Ticker": "BMN.AX", "tv_ticker": "BMN.AX", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
+    {"Name": "Elevate Uranium", "Country": "Australia", "Ticker": "EL8.AX", "tv_ticker": "EL8.AX", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
+    {"Name": "Paladin Energy", "Country": "Australia", "Ticker": "PDN.AX", "tv_ticker": "PDN.AX", "Stock exchange": "ASX", "stock_exchange_tv": "ASX"},
 ]
 
 # Combine all stocks for processing
